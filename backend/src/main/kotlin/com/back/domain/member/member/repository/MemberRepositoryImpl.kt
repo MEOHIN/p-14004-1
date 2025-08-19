@@ -1,4 +1,25 @@
 package com.back.domain.member.member.repository
 
-class MemberRepositoryImpl {
+import com.back.domain.member.member.entity.Member
+import com.back.domain.member.member.entity.QMember
+import com.back.standard.extensions.getOrThrow
+import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.support.PageableExecutionUtils
+import org.springframework.stereotype.Repository
+
+@Repository
+class MemberRepositoryImpl(
+    private val queryFactory: JPAQueryFactory
+) : MemberRepositoryCustom {
+
+    override fun findQById(id: Int): Member? {
+        val member = QMember.member
+
+        return queryFactory
+            .selectFrom(member)
+            .where(member.id.eq(id))
+            .fetchOne()
+    }
 }
