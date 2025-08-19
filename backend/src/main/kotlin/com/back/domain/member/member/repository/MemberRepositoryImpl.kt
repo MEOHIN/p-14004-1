@@ -2,11 +2,7 @@ package com.back.domain.member.member.repository
 
 import com.back.domain.member.member.entity.Member
 import com.back.domain.member.member.entity.QMember
-import com.back.standard.extensions.getOrThrow
 import com.querydsl.jpa.impl.JPAQueryFactory
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
-import org.springframework.data.support.PageableExecutionUtils
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -20,6 +16,15 @@ class MemberRepositoryImpl(
         return queryFactory
             .selectFrom(member)
             .where(member.id.eq(id))
+            .fetchOne()
+    }
+
+    override fun findQByUsername(username: String): Member? {
+        val member = QMember.member
+
+        return queryFactory
+            .selectFrom(member)
+            .where(member.username.eq(username))
             .fetchOne()
     }
 }
