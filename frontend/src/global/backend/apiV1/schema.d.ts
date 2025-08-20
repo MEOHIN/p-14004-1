@@ -291,6 +291,25 @@ export interface components {
             msg: string;
             data: components["schemas"]["MemberLoginResBody"];
         };
+        PageDtoPostDto: {
+            content: components["schemas"]["PostDto"][];
+            pageable: components["schemas"]["PageableDto"];
+        };
+        PageableDto: {
+            /** Format: int32 */
+            pageNumber: number;
+            /** Format: int32 */
+            pageSize: number;
+            /** Format: int64 */
+            offset: number;
+            /** Format: int64 */
+            totalElements: number;
+            /** Format: int32 */
+            totalPages: number;
+            /** Format: int32 */
+            numberOfElements: number;
+            sorted: boolean;
+        };
         PostWithContentDto: {
             /** Format: int32 */
             id: number;
@@ -319,6 +338,10 @@ export interface components {
         AdmPostCountResBody: {
             /** Format: int64 */
             all: number;
+        };
+        PageDtoMemberWithUsernameDto: {
+            content: components["schemas"]["MemberWithUsernameDto"][];
+            pageable: components["schemas"]["PageableDto"];
         };
     };
     responses: never;
@@ -528,7 +551,13 @@ export interface operations {
     };
     getItems: {
         parameters: {
-            query?: never;
+            query?: {
+                page?: number;
+                pageSize?: number;
+                kwType?: "TITLE" | "CONTENT" | "AUTHOR" | "ALL";
+                kw?: string;
+                sort?: "ID" | "ID_ASC" | "CREATE_DATE" | "CREATE_DATE_ASC" | "MODIFY_DATE" | "MODIFY_DATE_ASC";
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -541,7 +570,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json;charset=UTF-8": components["schemas"]["PostDto"][];
+                    "application/json;charset=UTF-8": components["schemas"]["PageDtoPostDto"];
                 };
             };
             /** @description Bad Request */
@@ -780,7 +809,13 @@ export interface operations {
     };
     getItems_2: {
         parameters: {
-            query?: never;
+            query?: {
+                page?: number;
+                pageSize?: number;
+                kwType?: "USERNAME" | "NICKNAME" | "ALL";
+                kw?: string;
+                sort?: "ID" | "ID_ASC" | "USERNAME" | "USERNAME_ASC" | "NICKNAME" | "NICKNAME_ASC";
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -793,7 +828,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json;charset=UTF-8": components["schemas"]["MemberWithUsernameDto"][];
+                    "application/json;charset=UTF-8": components["schemas"]["PageDtoMemberWithUsernameDto"];
                 };
             };
             /** @description Bad Request */
