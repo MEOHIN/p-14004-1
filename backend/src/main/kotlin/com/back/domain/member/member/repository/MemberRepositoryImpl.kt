@@ -5,7 +5,6 @@ import com.back.domain.member.member.entity.QMember
 import com.back.standard.extensions.getOrThrow
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.data.support.PageableExecutionUtils
 import org.springframework.stereotype.Repository
@@ -128,5 +127,15 @@ class MemberRepositoryImpl(
         return PageableExecutionUtils.getPage(results, pageable) {
             totalQuery.fetchFirst().getOrThrow()
         }
+    }
+
+    override fun findQByNicknameContainingOrderByIdDesc(nickname: String): List<Member> {
+        val member = QMember.member
+
+        return queryFactory
+            .selectFrom(member)
+            .where(member.nickname.contains(nickname))
+            .orderBy(member.id.desc())
+            .fetch()
     }
 }
