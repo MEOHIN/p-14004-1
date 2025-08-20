@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
-interface MemberRepository : JpaRepository<Member, Int>,  MemberRepositoryCustom {
+interface MemberRepository : JpaRepository<Member, Int>, MemberRepositoryCustom {
     fun findByUsername(username: String): Member?
 
     fun findByApiKey(apiKey: String): Member?
@@ -31,4 +31,6 @@ interface MemberRepository : JpaRepository<Member, Int>,  MemberRepositoryCustom
     fun findByNicknameContainingOrderByIdDesc(nickname: String): List<Member>
 
     fun findByUsernameContaining(username: String, pageable: Pageable): Page<Member>
+
+    override fun findAll(pageable: Pageable): Page<Member>
 }
