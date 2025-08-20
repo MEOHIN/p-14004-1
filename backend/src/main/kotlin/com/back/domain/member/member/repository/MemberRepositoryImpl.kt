@@ -2,7 +2,6 @@ package com.back.domain.member.member.repository
 
 import com.back.domain.member.member.entity.Member
 import com.back.domain.member.member.entity.QMember
-import com.back.standard.extensions.getOrThrow
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -65,7 +64,11 @@ class MemberRepositoryImpl(
             .fetch()
     }
 
-    override fun findQByUsernameAndEitherPasswordOrNickname(username: String, password: String?, nickname: String?): List<Member> {
+    override fun findQByUsernameAndEitherPasswordOrNickname(
+        username: String,
+        password: String?,
+        nickname: String?
+    ): List<Member> {
         val member = QMember.member
 
         return queryFactory
@@ -125,7 +128,7 @@ class MemberRepositoryImpl(
             .where(member.nickname.contains(nickname))
 
         return PageableExecutionUtils.getPage(results, pageable) {
-            totalQuery.fetchFirst().getOrThrow()
+            totalQuery.fetchFirst() ?: 0L
         }
     }
 
@@ -168,5 +171,12 @@ class MemberRepositoryImpl(
         return PageableExecutionUtils.getPage(results, pageable) {
             totalQuery.fetchFirst() ?: 0L
         }
+    }
+
+    override fun findQPagedByKw(
+        kw: String,
+        pageable: Pageable
+    ): Page<Member> {
+        throw RuntimeException("Not implemented yet")
     }
 }
